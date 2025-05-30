@@ -1,0 +1,21 @@
+{
+  "name": "Bible Study Randomiser",
+  "short_name": "Bible Study",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#e0c3fc",
+  "theme_color": "#4CAF50",
+  "description": "A random Bible study chapter generator.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

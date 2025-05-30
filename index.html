@@ -37,24 +37,6 @@
             background: var(--bg-color-dark);
             color: var(--text-color-dark);
         }
-        #joke-container {
-            position: absolute;
-            top: 10px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            animation: float 3s ease-in-out infinite;
-        }
-        #joke {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 12px;
-            color: black;
-        }
-        @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0); }
-        }
         h1 {
             font-size: 36px;
             color: inherit;
@@ -178,10 +160,6 @@
     </style>
 </head>
 <body>
-    <div id="joke-container">
-        <div id="joke"></div>
-    </div>
-
     <h1>Bible Study Randomiser</h1>
     <button id="generateButton" onclick="generateRandomChapters()">Generate Study Plan</button>
     <div class="toggle-switch">
@@ -196,44 +174,6 @@
     </div>
 
     <script>
-        const jokes = [
-            "Why didn’t they play cards on the Ark? Because Noah was standing on the deck!",
-            "Who was the fastest runner in the Bible? Adam — he was first in the human race!",
-            "Why couldn’t Jonah trust the ocean? He just knew there was something fishy about it.",
-            "What kind of man was Boaz before he got married? Ruthless.",
-            "Where was Solomon’s temple located? On the side of his head!",
-            "Why didn’t anyone want to fight Goliath? It seemed like a giant ordeal.",
-            "What car did the disciples drive? A Honda — they were all in one Accord.",
-            "How do we know Peter was a rich fisherman? By his net income.",
-            "Why did Noah have so many apples? Because he had an ark-ard!",
-            "What’s a missionary’s favorite type of car? A convertible (converts people)!",
-            "Why was the broom late? It swept in!",
-            "How do angels greet each other? Halo there!",
-            "Why didn’t Cain bring an acceptable offering? He just wasn’t Abel.",
-            "What’s Eve’s favorite food? Ribs.",
-            "Why was Noah a great businessman? He floated his stock while the world was in liquidation.",
-            "How does Moses make his coffee? Hebrews it.",
-            "What kind of lights did Noah have on the Ark? Floodlights.",
-            "Who was the smartest man in the Bible? Abraham — he knew a Lot.",
-            "Why did the hawk sit on the church's steeple? It was a bird of pray.",
-            "Why don’t skeletons fight each other? They don’t have the guts.",
-            "Where do sick boats go? To the dock.",
-            "Who was the greatest financier in the Bible? Noah — he was able to float his stock while the whole world was in liquidation.",
-            "Why was everyone so tired on the ark? Because they were cooped up for 40 days and 40 nights.",
-            "Why did Adam and Eve do math every day? They were told to be fruitful and multiply.",
-            "Why couldn’t Pharaoh trust his camel? Because it was a drama-dairy.",
-            "Why did Samson try to avoid arguing with Delilah? He didn't want to split hairs."
-        ];
-
-        let jokeIndex = 0;
-
-        function showNextJoke() {
-            document.getElementById('joke').textContent = jokes[jokeIndex];
-            jokeIndex = (jokeIndex + 1) % jokes.length;
-        }
-
-        showNextJoke();
-
         const resultDiv = document.getElementById('result');
         const generateButton = document.getElementById('generateButton');
         const chapterView = document.createElement('div');
@@ -246,7 +186,6 @@
         }
 
         function generateRandomChapters() {
-            showNextJoke();
             let resultHTML = '';
             for (let group in bibleGroups) {
                 let books = Object.keys(bibleGroups[group].books);

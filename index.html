@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bible Study Randomiser</title>
     <style>
+        /* (same styles as before) */
         :root {
             --bg-color-light: linear-gradient(to right, #e0c3fc, #8ec5fc);
             --bg-color-dark: linear-gradient(to right, #232526, #414345);
@@ -45,7 +46,6 @@
             border: none;
             padding: 10px 20px;
             text-align: center;
-            text-decoration: none;
             font-size: 16px;
             border-radius: 8px;
             cursor: pointer;
@@ -114,14 +114,6 @@
             align-items: center;
             margin-bottom: 15px;
         }
-        .study-link {
-            font-size: 16px;
-            color: var(--link-color-light);
-            text-decoration: none;
-        }
-        body.dark-mode .study-link {
-            color: var(--link-color-dark);
-        }
         .chapter {
             max-width: 800px;
             margin: 20px auto;
@@ -136,7 +128,7 @@
 </head>
 <body>
     <h1>Bible Study Randomiser</h1>
-    <button onclick="generateRandomChapters()">Generate Study Plan</button>
+    <button id="generateButton" onclick="generateRandomChapters()">Generate Study Plan</button>
     <div class="toggle-switch">
         <label for="darkModeToggle">Dark Mode</label>
         <input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode()">
@@ -153,6 +145,7 @@
         };
 
         const resultDiv = document.getElementById('result');
+        const generateButton = document.getElementById('generateButton');
         const chapterView = document.createElement('div');
         chapterView.classList.add('chapter');
         chapterView.style.display = 'none';
@@ -174,6 +167,7 @@
             resultDiv.innerHTML = resultHTML;
             resultDiv.style.display = 'block';
             chapterView.style.display = 'none';
+            generateButton.style.display = 'inline-block';
         }
 
         async function fetchChapter(book, chapter) {
@@ -196,11 +190,13 @@
 
             resultDiv.style.display = 'none';
             chapterView.style.display = 'block';
+            generateButton.style.display = 'none';
         }
 
         function backToRandomiser() {
             chapterView.style.display = 'none';
             resultDiv.style.display = 'block';
+            generateButton.style.display = 'inline-block';
         }
 
         function toggleDarkMode() {

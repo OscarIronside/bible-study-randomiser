@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bible Study Randomiser</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="theme-color" content="#4CAF50">
     <style>
-        /* (same styles as before) */
         :root {
             --bg-color-light: linear-gradient(to right, #e0c3fc, #8ec5fc);
             --bg-color-dark: linear-gradient(to right, #232526, #414345);
@@ -201,6 +203,11 @@
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('Service Worker Registered'));
         }
     </script>
 </body>

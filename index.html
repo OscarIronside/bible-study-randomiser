@@ -137,6 +137,26 @@
             line-height: 1.6;
             margin: 10px 0;
         }
+        #installTip {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            background: #f9edbe;
+            color: #222;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-size: 16px;
+            z-index: 1000;
+        }
+        #closeTip {
+            background: none;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -148,6 +168,10 @@
     </div>
     <div class="result" id="result"></div>
     <button id="installButton" onclick="showInstallPrompt()">Install Bible Study App</button>
+    <div id="installTip">
+        📱 Tip: Tap <strong>Share</strong> → <strong>Add to Home Screen</strong> to install this app.
+        <button id="closeTip" onclick="document.getElementById('installTip').style.display='none'">×</button>
+    </div>
 
     <script>
         const bibleGroups = {
@@ -244,6 +268,16 @@
                 });
             }
         }
+
+        // Show Install Tip for both iOS and Android
+        function showInstallTip() {
+            document.getElementById('installTip').style.display = 'block';
+        }
+
+        // Show the install tip after a few seconds
+        window.addEventListener('load', () => {
+            setTimeout(showInstallTip, 3000);
+        });
     </script>
 </body>
 </html>

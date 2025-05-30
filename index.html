@@ -5,50 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bible Study Randomiser</title>
     <style>
+        :root {
+            --bg-color-light: linear-gradient(to right, #e0c3fc, #8ec5fc);
+            --bg-color-dark: linear-gradient(to right, #232526, #414345);
+            --text-color-light: #333;
+            --text-color-dark: #eee;
+            --card-bg-light: white;
+            --card-bg-dark: #2c2c2c;
+            --button-bg-light: #4CAF50;
+            --button-bg-dark: #6abf69;
+            --link-color-light: #1a73e8;
+            --link-color-dark: #8ab4f8;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+            background: var(--bg-color-light);
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
+            transition: background 0.5s, color 0.5s;
+        }
+        body.dark-mode {
+            background: var(--bg-color-dark);
+            color: var(--text-color-dark);
         }
         h1 {
             font-size: 36px;
-            color: #333;
+            color: inherit;
             margin-bottom: 20px;
         }
         button {
-            background-color: #4CAF50;
+            background-color: var(--button-bg-light);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
-            display: inline-block;
-            font-size: 18px;
+            font-size: 16px;
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin: 5px;
+        }
+        body.dark-mode button {
+            background-color: var(--button-bg-dark);
         }
         button:hover {
             background-color: #45a049;
         }
+        .toggle-switch {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+        .toggle-switch input[type="checkbox"] {
+            appearance: none;
+            width: 40px;
+            height: 20px;
+            background: #ccc;
+            border-radius: 20px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .toggle-switch input[type="checkbox"]:checked {
+            background: #4CAF50;
+        }
+        .toggle-switch input[type="checkbox"]::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: white;
+            top: 1px;
+            left: 1px;
+            transition: 0.3s;
+        }
+        .toggle-switch input[type="checkbox"]:checked::before {
+            transform: translateX(20px);
+        }
         .result {
             margin-top: 30px;
-            background: white;
+            background: var(--card-bg-light);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             font-size: 20px;
-            color: #555;
+            color: inherit;
             text-align: left;
             max-width: 500px;
             width: 90%;
+            transition: background 0.5s, color 0.5s;
+        }
+        body.dark-mode .result {
+            background: var(--card-bg-dark);
         }
         .entry {
             display: flex;
@@ -58,57 +116,47 @@
         }
         .study-link {
             font-size: 16px;
-            color: #1a73e8;
+            color: var(--link-color-light);
             text-decoration: none;
         }
-        .study-link:hover {
-            text-decoration: underline;
+        body.dark-mode .study-link {
+            color: var(--link-color-dark);
+        }
+        .chapter {
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+            padding: 20px;
+        }
+        .chapter p {
+            line-height: 1.6;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
     <h1>Bible Study Randomiser</h1>
     <button onclick="generateRandomChapters()">Generate Study Plan</button>
+    <div class="toggle-switch">
+        <label for="darkModeToggle">Dark Mode</label>
+        <input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode()">
+    </div>
     <div class="result" id="result"></div>
 
     <script>
         const bibleGroups = {
-            "Law and History": {
-                books: {
-                    "Genesis": 50, "Exodus": 40, "Leviticus": 27, "Numbers": 36, "Deuteronomy": 34,
-                    "Joshua": 24, "Judges": 21, "Ruth": 4, "1 Samuel": 31, "2 Samuel": 24,
-                    "1 Kings": 22, "2 Kings": 25, "1 Chronicles": 29, "2 Chronicles": 36,
-                    "Ezra": 10, "Nehemiah": 13, "Esther": 10
-                }
-            },
-            "Wisdom": {
-                books: {
-                    "Job": 42, "Psalms": 150, "Proverbs": 31, "Ecclesiastes": 12, "Song of Solomon": 8
-                }
-            },
-            "Prophets": {
-                books: {
-                    "Isaiah": 66, "Jeremiah": 52, "Lamentations": 5, "Ezekiel": 48, "Daniel": 12,
-                    "Hosea": 14, "Joel": 3, "Amos": 9, "Obadiah": 1, "Jonah": 4,
-                    "Micah": 7, "Nahum": 3, "Habakkuk": 3, "Zephaniah": 3, "Haggai": 2,
-                    "Zechariah": 14, "Malachi": 4
-                }
-            },
-            "Gospels and Acts": {
-                books: {
-                    "Matthew": 28, "Mark": 16, "Luke": 24, "John": 21, "Acts": 28
-                }
-            },
-            "Letters and Revelation": {
-                books: {
-                    "Romans": 16, "1 Corinthians": 16, "2 Corinthians": 13, "Galatians": 6, "Ephesians": 6,
-                    "Philippians": 4, "Colossians": 4, "1 Thessalonians": 5, "2 Thessalonians": 3,
-                    "1 Timothy": 6, "2 Timothy": 4, "Titus": 3, "Philemon": 1,
-                    "Hebrews": 13, "James": 5, "1 Peter": 5, "2 Peter": 3, "1 John": 5,
-                    "2 John": 1, "3 John": 1, "Jude": 1, "Revelation": 22
-                }
-            }
+            "Law and History": { books: { "Genesis": 50, "Exodus": 40, "Leviticus": 27, "Numbers": 36, "Deuteronomy": 34, "Joshua": 24, "Judges": 21, "Ruth": 4, "1 Samuel": 31, "2 Samuel": 24, "1 Kings": 22, "2 Kings": 25, "1 Chronicles": 29, "2 Chronicles": 36, "Ezra": 10, "Nehemiah": 13, "Esther": 10 } },
+            "Wisdom": { books: { "Job": 42, "Psalms": 150, "Proverbs": 31, "Ecclesiastes": 12, "Song of Solomon": 8 } },
+            "Prophets": { books: { "Isaiah": 66, "Jeremiah": 52, "Lamentations": 5, "Ezekiel": 48, "Daniel": 12, "Hosea": 14, "Joel": 3, "Amos": 9, "Obadiah": 1, "Jonah": 4, "Micah": 7, "Nahum": 3, "Habakkuk": 3, "Zephaniah": 3, "Haggai": 2, "Zechariah": 14, "Malachi": 4 } },
+            "Gospels and Acts": { books: { "Matthew": 28, "Mark": 16, "Luke": 24, "John": 21, "Acts": 28 } },
+            "Letters and Revelation": { books: { "Romans": 16, "1 Corinthians": 16, "2 Corinthians": 13, "Galatians": 6, "Ephesians": 6, "Philippians": 4, "Colossians": 4, "1 Thessalonians": 5, "2 Thessalonians": 3, "1 Timothy": 6, "2 Timothy": 4, "Titus": 3, "Philemon": 1, "Hebrews": 13, "James": 5, "1 Peter": 5, "2 Peter": 3, "1 John": 5, "2 John": 1, "3 John": 1, "Jude": 1, "Revelation": 22 } }
         };
+
+        const resultDiv = document.getElementById('result');
+        const chapterView = document.createElement('div');
+        chapterView.classList.add('chapter');
+        chapterView.style.display = 'none';
+        document.body.appendChild(chapterView);
 
         function getRandomElement(array) {
             return array[Math.floor(Math.random() * array.length)];
@@ -121,11 +169,42 @@
                 let randomBook = getRandomElement(books);
                 let chapters = bibleGroups[group].books[randomBook];
                 let randomChapter = Math.floor(Math.random() * chapters) + 1;
-                let bookFormatted = randomBook.replace(/ /g, '+');
-                let url = `https://www.biblegateway.com/passage/?search=${bookFormatted}+${randomChapter}&version=NASB`;
-                resultHTML += `<div class="entry"><div><strong>${group}</strong><br>${randomBook} ${randomChapter}</div><a class="study-link" href="${url}" target="_blank">Read</a></div>`;
+                resultHTML += `<div class="entry"><div><strong>${group}</strong><br>${randomBook} ${randomChapter}</div><button onclick="fetchChapter('${randomBook}', ${randomChapter})">Read</button></div>`;
             }
-            document.getElementById('result').innerHTML = resultHTML;
+            resultDiv.innerHTML = resultHTML;
+            resultDiv.style.display = 'block';
+            chapterView.style.display = 'none';
+        }
+
+        async function fetchChapter(book, chapter) {
+            const query = `${book} ${chapter}`.replace(/ /g, '+');
+            const url = `https://bible-api.com/${query}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.error) {
+                alert('Sorry, could not load chapter.');
+                return;
+            }
+
+            const versesText = data.verses.map(v => `<sup>${v.verse}</sup> ${v.text}`).join(' ');
+            chapterView.innerHTML = `
+                <h1>${data.reference}</h1>
+                <p>${versesText}</p>
+                <button onclick="backToRandomiser()">Home</button>
+            `;
+
+            resultDiv.style.display = 'none';
+            chapterView.style.display = 'block';
+        }
+
+        function backToRandomiser() {
+            chapterView.style.display = 'none';
+            resultDiv.style.display = 'block';
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
         }
     </script>
 </body>

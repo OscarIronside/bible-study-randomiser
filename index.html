@@ -37,22 +37,15 @@
             background: var(--bg-color-dark);
             color: var(--text-color-dark);
         }
-        #joke {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            max-width: 90%;
-            padding: 10px;
-            background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: float 3s ease-in-out infinite;
+        #joke-container {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
-        @keyframes float {
-            0% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-5px) rotate(3deg); }
-            100% { transform: translateY(0) rotate(-3deg); }
+        #joke {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         h1 {
             font-size: 36px;
@@ -177,7 +170,15 @@
     </style>
 </head>
 <body>
-    <div id="joke" class="rainbow-text"></div>
+    <div id="joke-container">
+        <svg viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg">
+            <path id="arcPath" fill="transparent" d="M50,100 A200,200 0 0,1 450,100" />
+            <text id="joke" font-size="16" fill="black">
+                <textPath href="#arcPath" startOffset="50%" text-anchor="middle"></textPath>
+            </text>
+        </svg>
+    </div>
+
     <h1>Bible Study Randomiser</h1>
     <button id="generateButton" onclick="generateRandomChapters()">Generate Study Plan</button>
     <div class="toggle-switch">
@@ -207,7 +208,7 @@
 
         function showRandomJoke() {
             const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-            document.getElementById('joke').textContent = randomJoke;
+            document.querySelector('#joke textPath').textContent = randomJoke;
         }
 
         showRandomJoke();

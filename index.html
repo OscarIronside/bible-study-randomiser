@@ -46,29 +46,23 @@
             font-size: 20px;
             color: #555;
             text-align: left;
-            max-width: 400px;
+            max-width: 500px;
             width: 90%;
         }
-        .spinner {
-            margin-top: 30px;
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #4CAF50;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            display: none;
+        .study-link {
+            font-size: 16px;
+            margin-left: 10px;
+            color: #1a73e8;
+            text-decoration: none;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .study-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <h1>Bible Study Randomizer</h1>
     <button onclick="generateRandomChapters()">Generate Study Plan</button>
-    <div class="spinner" id="spinner"></div>
     <div class="result" id="result"></div>
 
     <script>
@@ -115,22 +109,17 @@
         }
 
         function generateRandomChapters() {
-            document.getElementById('result').style.display = 'none';
-            document.getElementById('spinner').style.display = 'block';
-
-            setTimeout(() => {
-                let resultHTML = '';
-                for (let group in bibleGroups) {
-                    let books = Object.keys(bibleGroups[group].books);
-                    let randomBook = getRandomElement(books);
-                    let chapters = bibleGroups[group].books[randomBook];
-                    let randomChapter = Math.floor(Math.random() * chapters) + 1;
-                    resultHTML += `<strong>${group}</strong><br>${randomBook} ${randomChapter}<br><br>`;
-                }
-                document.getElementById('spinner').style.display = 'none';
-                document.getElementById('result').innerHTML = resultHTML;
-                document.getElementById('result').style.display = 'block';
-            }, 1000); // Simulated loading time
+            let resultHTML = '';
+            for (let group in bibleGroups) {
+                let books = Object.keys(bibleGroups[group].books);
+                let randomBook = getRandomElement(books);
+                let chapters = bibleGroups[group].books[randomBook];
+                let randomChapter = Math.floor(Math.random() * chapters) + 1;
+                let bookFormatted = randomBook.replace(/ /g, '+');
+                let url = `https://biblehub.com/commentaries/${bookFormatted}/${randomChapter}.htm`;
+                resultHTML += `<strong>${group}</strong><br>${randomBook} ${randomChapter} <a class="study-link" href="${url}" target="_blank">Study</a><br><br>`;
+            }
+            document.getElementById('result').innerHTML = resultHTML;
         }
     </script>
 </body>

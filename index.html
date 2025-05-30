@@ -60,6 +60,17 @@
         button:hover {
             background-color: #45a049;
         }
+        #installButton {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
         .toggle-switch {
             margin-top: 10px;
             display: flex;
@@ -136,6 +147,7 @@
         <input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode()">
     </div>
     <div class="result" id="result"></div>
+    <button id="installButton" onclick="showInstallPrompt()">Install Bible Study App</button>
 
     <script>
         const bibleGroups = {
@@ -208,6 +220,29 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js')
                 .then(() => console.log('Service Worker Registered'));
+        }
+
+        // Custom Install Button Logic
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installButton').style.display = 'block';
+        });
+
+        function showInstallPrompt() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('installButton').style.display = 'none';
+                });
+            }
         }
     </script>
 </body>

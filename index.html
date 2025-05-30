@@ -122,7 +122,7 @@
                 let chapters = bibleGroups[group].books[randomBook];
                 let randomChapter = Math.floor(Math.random() * chapters) + 1;
                 let bookFormatted = randomBook.replace(/ /g, '+');
-                let url = `https://www.biblegateway.com/passage/?search=${bookFormatted}+${randomChapter}`;
+                let url = `https://www.biblegateway.com/passage/?search=${bookFormatted}+${randomChapter}&version=NASB`;
                 resultHTML += `<div class="entry"><div><strong>${group}</strong><br>${randomBook} ${randomChapter}</div><a class="study-link" href="${url}" target="_blank">Read</a></div>`;
             }
             document.getElementById('result').innerHTML = resultHTML;
